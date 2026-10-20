@@ -195,6 +195,14 @@
     .reveal { opacity: 0; transform: translateY(18px); animation: rise .7s ease forwards; }
     @keyframes rise { to { opacity: 1; transform: none; } }
   }
+  img.screen{width:100%;height:100%;object-fit:cover;display:block}
+  .phone::before{display:none}
+  .gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:40px}
+  .shot{margin:0;display:flex;flex-direction:column;align-items:center;gap:12px}
+  .phone.sm{width:100%;max-width:210px;aspect-ratio:300/650;padding:8px;border-radius:30px}
+  .phone.sm .screen{border-radius:22px}
+  .shot figcaption{font-size:.9rem;color:var(--muted);text-align:center;font-weight:600}
+  @media (max-width:880px){.gallery{grid-template-columns:1fr 1fr}}
 </style>
 
 <!-- NAV -->
@@ -242,38 +250,7 @@
     <!-- phone -->
     <div class="phone-stage reveal">
       <div class="phone" aria-label="Vista previa de la app">
-        <div class="screen">
-          <div class="scr-head">
-            <div class="hi">Hola 👋</div>
-            <div class="sub">Bienvenido a SustentApp-Moderna</div>
-          </div>
-          <div class="scr-body">
-            <div class="scr-label">CALCULADORAS</div>
-            <div class="scr-grid">
-              <div class="mini" style="background:linear-gradient(135deg,var(--c-agua),#1565C0)">
-                <svg class="ic" viewBox="0 0 24 24" fill="#fff"><path d="M12 3s6 7 6 11a6 6 0 1 1-12 0c0-4 6-11 6-11Z"/></svg>
-                <span><b>Agua</b><br><small>Costo por litro</small></span>
-              </div>
-              <div class="mini" style="background:linear-gradient(135deg,var(--c-fuel),#D84315)">
-                <svg class="ic" viewBox="0 0 24 24" fill="#fff"><path d="M6 3h8v18H4V5a2 2 0 0 1 2-2Zm10 6h1.5a2 2 0 0 1 2 2v6a1.5 1.5 0 0 0 3 0V9l-3-3"/></svg>
-                <span><b>Combustible</b><br><small>Rendimiento km/L</small></span>
-              </div>
-              <div class="mini" style="background:linear-gradient(135deg,var(--c-gas),#FF8F00)">
-                <svg class="ic" viewBox="0 0 24 24" fill="#fff"><path d="M12 2s5 5 5 10a5 5 0 1 1-10 0c0-2 1-3 2-5 1 1 1 2 1 3 1-2 2-5 2-8Z"/></svg>
-                <span><b>Gas</b><br><small>Precio por litro</small></span>
-              </div>
-              <div class="mini" style="background:linear-gradient(135deg,var(--c-elec),#512DA8)">
-                <svg class="ic" viewBox="0 0 24 24" fill="#fff"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg>
-                <span><b>Electricidad</b><br><small>kWh y costo</small></span>
-              </div>
-            </div>
-            <div class="scr-label" style="margin-top:4px">MÁS</div>
-            <div class="mini" style="background:linear-gradient(135deg,var(--orange),#FF8F00); aspect-ratio:auto; flex-direction:row; align-items:center; gap:10px">
-              <svg class="ic" viewBox="0 0 24 24" fill="#fff"><path d="M9 21h6v-1H9v1Zm3-19a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z"/></svg>
-              <span><b>Tips de sustentabilidad</b><br><small>Consejos y casos de éxito</small></span>
-            </div>
-          </div>
-        </div>
+        <img class="screen" src="shots/home.jpg" alt="Pantalla de inicio de SustentApp-Moderna">
       </div>
     </div>
   </div>
@@ -404,6 +381,23 @@
         <h3>Separa residuos</h3>
         <p>Reciclar y compostar puede bajar a la mitad la basura de tu hogar.</p>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAPTURAS -->
+<section class="band band-pad" id="capturas" style="background:var(--surface-2);border-block:1px solid var(--border)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Capturas</span>
+      <h2>Así se ve la app</h2>
+      <p>Pantallas reales de SustentApp-Moderna corriendo en Android.</p>
+    </div>
+    <div class="gallery">
+      <figure class="shot"><div class="phone sm"><img class="screen" src="shots/agua.jpg" alt="Calculadora de agua con graficas"></div><figcaption>Calculadora con gráficas</figcaption></figure>
+      <figure class="shot"><div class="phone sm"><img class="screen" src="shots/tips.jpg" alt="Lista de tips"></div><figcaption>Tips de sustentabilidad</figcaption></figure>
+      <figure class="shot"><div class="phone sm"><img class="screen" src="shots/detalle.jpg" alt="Detalle de un tip"></div><figcaption>Detalle de cada tip</figcaption></figure>
+      <figure class="shot"><div class="phone sm"><img class="screen" src="shots/menu.jpg" alt="Menu de la app"></div><figcaption>Menú e información</figcaption></figure>
     </div>
   </div>
 </section>
