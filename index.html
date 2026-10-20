@@ -1,0 +1,502 @@
+﻿<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SustentApp-Moderna</title>
+<meta name="description" content="Mide y reduce tu huella de consumo de agua, combustible, gas y electricidad. App Android hecha en Mexico.">
+<meta property="og:title" content="SustentApp-Moderna">
+<meta property="og:description" content="Mide tu consumo. Reduce tu huella. App Android para agua, combustible, gas y electricidad.">
+<meta property="og:type" content="website">
+<style>:root{color-scheme:light}body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700&display=swap">
+<style>
+  /* Layout concept: single-column scroll of full-width bands; each band has an inner max-width wrapper that owns the side gutter. */
+  :root {
+    --jade: #00A86B;
+    --jade-deep: #00794D;
+    --teal: #00BFA5;
+    --orange: #FF6D00;
+    --c-agua: #2196F3;
+    --c-fuel: #FF5722;
+    --c-gas: #FFB300;
+    --c-elec: #7C4DFF;
+
+    --bg: #F4F8F6;
+    --surface: #FFFFFF;
+    --surface-2: #ECF3EF;
+    --fg: #10201A;
+    --muted: #5A6B63;
+    --border: #DCE7E1;
+    --shadow: 0 18px 50px -24px rgba(0,66,42,0.45);
+
+    --display: "Bricolage Grotesque", "Trebuchet MS", sans-serif;
+    --body: "Manrope", system-ui, -apple-system, sans-serif;
+
+    --maxw: 1120px;
+    --radius: 22px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0C1310;
+      --surface: #141E19;
+      --surface-2: #19251F;
+      --fg: #E7F0EA;
+      --muted: #9DB0A6;
+      --border: #26332C;
+      --shadow: 0 20px 60px -28px rgba(0,0,0,0.7);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0C1310;
+    --surface: #141E19;
+    --surface-2: #19251F;
+    --fg: #E7F0EA;
+    --muted: #9DB0A6;
+    --border: #26332C;
+    --shadow: 0 20px 60px -28px rgba(0,0,0,0.7);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body { background: var(--bg); color: var(--fg); font-family: var(--body); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  h1,h2,h3 { font-family: var(--display); line-height: 1.08; text-wrap: balance; margin: 0; letter-spacing: -0.02em; }
+  p { margin: 0; }
+  a { color: inherit; }
+
+  .band { width: 100%; }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+  .band-pad { padding-block: clamp(56px, 9vw, 104px); }
+
+  /* NAV */
+  .nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 40; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+  .nav .wrap { display: flex; align-items: center; gap: 16px; padding-block: 12px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 800; font-size: 1.1rem; }
+  .leaf { width: 30px; height: 30px; border-radius: 9px; background: linear-gradient(135deg, var(--jade), var(--teal)); display: grid; place-items: center; flex: none; }
+  .nav-links { margin-left: auto; display: flex; gap: 22px; align-items: center; }
+  .nav-links a { text-decoration: none; color: var(--muted); font-weight: 600; font-size: .92rem; }
+  .nav-links a:hover { color: var(--fg); }
+  .btn { font-family: var(--body); font-weight: 700; border: none; border-radius: 999px; padding: 12px 22px; cursor: pointer; font-size: .95rem; text-decoration: none; display: inline-flex; align-items: center; gap: 9px; transition: transform .15s ease, box-shadow .15s ease; }
+  .btn-primary { background: linear-gradient(135deg, var(--jade), var(--teal)); color: #fff; box-shadow: 0 10px 26px -12px rgba(0,168,107,0.8); }
+  .btn-primary:hover { transform: translateY(-2px); }
+  .btn-ghost { background: var(--surface); color: var(--fg); border: 1px solid var(--border); }
+  .btn-ghost:hover { border-color: var(--jade); color: var(--jade); }
+  .nav .btn { padding: 9px 18px; }
+  @media (max-width: 760px){ .nav-links a.hide-sm { display: none; } }
+
+  /* HERO */
+  .hero .wrap { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(32px, 5vw, 64px); align-items: center; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: .8rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--jade); background: color-mix(in srgb, var(--jade) 12%, transparent); padding: 7px 14px; border-radius: 999px; }
+  .hero h1 { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 800; margin-top: 20px; }
+  .hero h1 .grad { background: linear-gradient(120deg, var(--jade), var(--teal) 60%, var(--c-elec)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lede { font-size: clamp(1.05rem, 2vw, 1.22rem); color: var(--muted); margin-top: 18px; max-width: 34ch; }
+  .hero-cta { display: flex; gap: 14px; margin-top: 30px; flex-wrap: wrap; }
+  .hero-meta { display: flex; gap: 26px; margin-top: 30px; flex-wrap: wrap; }
+  .hero-meta div { display: flex; flex-direction: column; }
+  .hero-meta b { font-family: var(--display); font-size: 1.5rem; font-weight: 800; }
+  .hero-meta span { font-size: .82rem; color: var(--muted); }
+
+  /* PHONE MOCKUP */
+  .phone-stage { display: grid; place-items: center; }
+  .phone { width: min(300px, 78vw); aspect-ratio: 300 / 620; background: #0b0f0d; border-radius: 40px; padding: 11px; box-shadow: var(--shadow); position: relative; }
+  .phone::before { content:""; position:absolute; top:16px; left:50%; transform:translateX(-50%); width:110px; height:22px; background:#0b0f0d; border-radius:0 0 16px 16px; z-index:3; }
+  .screen { width: 100%; height: 100%; border-radius: 30px; overflow: hidden; background: var(--surface); display: flex; flex-direction: column; }
+  .scr-head { background: linear-gradient(135deg, var(--jade), var(--teal)); color:#fff; padding: 40px 18px 22px; border-radius: 0 0 26px 26px; }
+  .scr-head .hi { font-family: var(--display); font-weight: 800; font-size: 1.3rem; }
+  .scr-head .sub { font-size: .72rem; opacity: .9; margin-top: 2px; }
+  .scr-body { padding: 16px 14px; display: flex; flex-direction: column; gap: 11px; flex: 1; }
+  .scr-label { font-size: .72rem; font-weight: 700; color: var(--muted); }
+  .scr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .mini { border-radius: 16px; aspect-ratio: 1 / 0.82; padding: 11px; color: #fff; display: flex; flex-direction: column; justify-content: space-between; }
+  .mini b { font-size: .8rem; }
+  .mini small { font-size: .6rem; opacity: .92; }
+  .ic { width: 22px; height: 22px; }
+
+  /* SECTION HEADERS */
+  .sec-head { max-width: 620px; }
+  .sec-head .eyebrow { margin-bottom: 14px; }
+  .sec-head h2 { font-size: clamp(1.9rem, 4vw, 2.7rem); font-weight: 800; }
+  .sec-head p { color: var(--muted); margin-top: 14px; font-size: 1.05rem; }
+
+  /* FEATURE CARDS */
+  .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 40px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 26px; display: flex; flex-direction: column; gap: 12px; }
+  .card .badge { width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; color: #fff; }
+  .card h3 { font-size: 1.3rem; font-weight: 700; }
+  .card p { color: var(--muted); }
+  .metrics { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+  .chip { font-size: .76rem; font-weight: 600; padding: 5px 11px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--border); color: var(--fg); }
+
+  /* STEPS */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 44px; counter-reset: step; }
+  .step { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 24px; }
+  .step .num { counter-increment: step; font-family: var(--display); font-weight: 800; font-size: 1rem; color: var(--jade); display:inline-grid; place-items:center; width: 40px; height: 40px; border-radius: 12px; background: color-mix(in srgb, var(--jade) 12%, transparent); margin-bottom: 16px; }
+  .step .num::before { content: "0" counter(step); }
+  .step h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
+  .step p { color: var(--muted); }
+
+  /* WHY / IMPROVEMENTS band */
+  .why { background: var(--surface-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .why-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; margin-top: 40px; }
+  .why-item { display: flex; gap: 14px; align-items: flex-start; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
+  .why-item .tick { flex: none; width: 30px; height: 30px; border-radius: 9px; background: color-mix(in srgb, var(--jade) 16%, transparent); color: var(--jade); display: grid; place-items: center; }
+  .why-item h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; }
+  .why-item p { color: var(--muted); font-size: .95rem; }
+
+  /* TIPS */
+  .tips { display:grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 40px; }
+  .tip { border-radius: 18px; padding: 22px; color: #fff; min-height: 150px; display:flex; flex-direction:column; justify-content:space-between; }
+  .tip h3 { font-size: 1.1rem; font-weight: 700; }
+  .tip p { font-size: .88rem; opacity: .95; margin-top: 6px; }
+
+  /* TECH */
+  .tech { display:flex; flex-wrap:wrap; gap: 12px; margin-top: 34px; }
+  .tech span { font-weight: 600; font-size: .9rem; padding: 10px 16px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); }
+
+  /* DOWNLOAD CTA */
+  .cta { background: linear-gradient(135deg, var(--jade-deep), var(--jade) 55%, var(--teal)); color: #fff; border-radius: 30px; padding: clamp(36px, 6vw, 64px); text-align: center; box-shadow: var(--shadow); }
+  .cta h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; color: #fff; }
+  .cta p { opacity: .95; margin-top: 14px; max-width: 48ch; margin-inline: auto; }
+  .store { display: inline-flex; align-items: center; gap: 12px; background: #0b140f; color: #fff; padding: 14px 26px; border-radius: 16px; margin-top: 28px; font-weight: 700; text-decoration: none; }
+  .store small { display:block; font-weight: 500; font-size: .66rem; opacity: .8; }
+  .store b { display:block; font-size: 1.05rem; font-family: var(--display); }
+  .note { font-size: .8rem; opacity: .85; margin-top: 16px; }
+
+  /* FOOTER */
+  footer { border-top: 1px solid var(--border); background: var(--surface); }
+  .foot { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 30px; }
+  .foot h4 { font-family: var(--body); font-weight: 700; font-size: .95rem; margin: 0 0 12px; }
+  .foot a { display: block; color: var(--muted); text-decoration: none; font-size: .9rem; padding: 4px 0; }
+  .foot a:hover { color: var(--jade); }
+  .socials { display: flex; gap: 10px; margin-top: 14px; }
+  .socials a { width: 40px; height: 40px; border-radius: 11px; display: grid; place-items: center; background: var(--surface-2); border: 1px solid var(--border); color: var(--fg); }
+  .socials a:hover { background: var(--jade); color: #fff; border-color: var(--jade); }
+  .foot-bottom { border-top: 1px solid var(--border); margin-top: 36px; padding-block: 22px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; color: var(--muted); font-size: .82rem; }
+
+  .theme-toggle { background: var(--surface); border: 1px solid var(--border); color: var(--fg); width: 40px; height: 40px; border-radius: 11px; cursor: pointer; display: grid; place-items: center; }
+
+  @media (max-width: 880px){
+    .hero .wrap { grid-template-columns: 1fr; }
+    .phone-stage { order: -1; }
+    .cards, .steps, .tips, .why-grid, .foot { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr; }
+  }
+  @media (min-width: 560px) and (max-width: 880px){
+    .cards, .tips { grid-template-columns: 1fr 1fr; }
+    .steps { grid-template-columns: 1fr 1fr 1fr; }
+  }
+  @media (prefers-reduced-motion: no-preference){
+    .reveal { opacity: 0; transform: translateY(18px); animation: rise .7s ease forwards; }
+    @keyframes rise { to { opacity: 1; transform: none; } }
+  }
+</style>
+
+<!-- NAV -->
+<div class="band nav">
+  <div class="wrap">
+    <div class="brand">
+      <span class="leaf" aria-hidden="true">
+        <svg class="ic" viewBox="0 0 24 24" fill="none"><path d="M12 3C7 4 5 8 5 12c0 2.2 1.2 3.8 3 4.5C8.5 12 11 9.5 15 8c-3 2-4.5 5-4.5 8.5C14 16.5 17 14 18 9.5 18.5 6 16 3 12 3Z" fill="#fff"/></svg>
+      </span>
+      SustentApp<span style="color:var(--teal)">Â·Moderna</span>
+    </div>
+    <nav class="nav-links">
+      <a href="#features" class="hide-sm">Calculadoras</a>
+      <a href="#tips" class="hide-sm">Tips</a>
+      <a href="#why" class="hide-sm">Por quÃ©</a>
+      <button class="theme-toggle" id="themeBtn" aria-label="Cambiar tema" title="Cambiar tema">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg>
+      </button>
+      <a href="#download" class="btn btn-primary">Descargar</a>
+    </nav>
+  </div>
+</div>
+
+<!-- HERO -->
+<header class="band hero band-pad">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow">â— App Android Â· Hecha en MÃ©xico</span>
+      <h1>Mide tu consumo.<br><span class="grad">Reduce tu huella.</span></h1>
+      <p class="lede">Registra agua, combustible, gas y electricidad en segundos y descubre cuÃ¡nto gastas, cuÃ¡nto rindes y cÃ³mo ahorrar.</p>
+      <div class="hero-cta">
+        <a href="#download" class="btn btn-primary">
+          <svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M12 16l-5-5h3V4h4v7h3l-5 5Zm-7 2h14v2H5v-2Z"/></svg>
+          Descargar APK
+        </a>
+        <a href="#features" class="btn btn-ghost">Ver funciones</a>
+      </div>
+      <div class="hero-meta">
+        <div><b>4</b><span>Calculadoras</span></div>
+        <div><b>100%</b><span>Funciona sin conexiÃ³n</span></div>
+        <div><b>Android 8+</b><span>Material 3</span></div>
+      </div>
+    </div>
+
+    <!-- phone -->
+    <div class="phone-stage reveal">
+      <div class="phone" aria-label="Vista previa de la app">
+        <div class="screen">
+          <div class="scr-head">
+            <div class="hi">Hola ðŸ‘‹</div>
+            <div class="sub">Bienvenido a SustentApp-Moderna</div>
+          </div>
+          <div class="scr-body">
+            <div class="scr-label">CALCULADORAS</div>
+            <div class="scr-grid">
+              <div class="mini" style="background:linear-gradient(135deg,var(--c-agua),#1565C0)">
+                <svg class="ic" viewBox="0 0 24 24" fill="#fff"><path d="M12 3s6 7 6 11a6 6 0 1 1-12 0c0-4 6-11 6-11Z"/></svg>
+                <span><b>Agua</b><br><small>Costo por litro</small></span>
+              </div>
+              <div class="mini" style="background:linear-gradient(135deg,var(--c-fuel),#D84315)">
+                <svg class="ic" viewBox="0 0 24 24" fill="#fff"><path d="M6 3h8v18H4V5a2 2 0 0 1 2-2Zm10 6h1.5a2 2 0 0 1 2 2v6a1.5 1.5 0 0 0 3 0V9l-3-3"/></svg>
+                <span><b>Combustible</b><br><small>Rendimiento km/L</small></span>
+              </div>
+              <div class="mini" style="background:linear-gradient(135deg,var(--c-gas),#FF8F00)">
+                <svg class="ic" viewBox="0 0 24 24" fill="#fff"><path d="M12 2s5 5 5 10a5 5 0 1 1-10 0c0-2 1-3 2-5 1 1 1 2 1 3 1-2 2-5 2-8Z"/></svg>
+                <span><b>Gas</b><br><small>Precio por litro</small></span>
+              </div>
+              <div class="mini" style="background:linear-gradient(135deg,var(--c-elec),#512DA8)">
+                <svg class="ic" viewBox="0 0 24 24" fill="#fff"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg>
+                <span><b>Electricidad</b><br><small>kWh y costo</small></span>
+              </div>
+            </div>
+            <div class="scr-label" style="margin-top:4px">MÃS</div>
+            <div class="mini" style="background:linear-gradient(135deg,var(--orange),#FF8F00); aspect-ratio:auto; flex-direction:row; align-items:center; gap:10px">
+              <svg class="ic" viewBox="0 0 24 24" fill="#fff"><path d="M9 21h6v-1H9v1Zm3-19a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z"/></svg>
+              <span><b>Tips de sustentabilidad</b><br><small>Consejos y casos de Ã©xito</small></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- FEATURES -->
+<section class="band band-pad" id="features">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Calculadoras</span>
+      <h2>Cuatro medidores, una sola app</h2>
+      <p>Captura tus recibos y cargas; la app calcula el rendimiento y el costo real de cada recurso, y lo guarda en tu dispositivo.</p>
+    </div>
+    <div class="cards">
+      <article class="card">
+        <span class="badge" style="background:linear-gradient(135deg,var(--c-agua),#1565C0)">
+          <svg class="ic" viewBox="0 0 24 24" fill="#fff"><path d="M12 3s6 7 6 11a6 6 0 1 1-12 0c0-4 6-11 6-11Z"/></svg>
+        </span>
+        <h3>Agua</h3>
+        <p>Del recibo bimestral calcula tu consumo diario y lo que cuesta cada litro.</p>
+        <div class="metrics"><span class="chip">Litros / dÃ­a</span><span class="chip">Costo / dÃ­a</span><span class="chip">Costo / litro</span></div>
+      </article>
+      <article class="card">
+        <span class="badge" style="background:linear-gradient(135deg,var(--c-fuel),#D84315)">
+          <svg class="ic" viewBox="0 0 24 24" fill="#fff"><path d="M6 3h8v18H4V5a2 2 0 0 1 2-2Zm10 6h1.5a2 2 0 0 1 2 2v6a1.5 1.5 0 0 0 3 0V9l-3-3"/></svg>
+        </span>
+        <h3>Combustible</h3>
+        <p>Con dos cargas y el odÃ³metro obtiene tu rendimiento real y el costo por kilÃ³metro.</p>
+        <div class="metrics"><span class="chip">km / L</span><span class="chip">Costo / km</span><span class="chip">Precio / L</span></div>
+      </article>
+      <article class="card">
+        <span class="badge" style="background:linear-gradient(135deg,var(--c-gas),#FF8F00)">
+          <svg class="ic" viewBox="0 0 24 24" fill="#fff"><path d="M12 2s5 5 5 10a5 5 0 1 1-10 0c0-2 1-3 2-5 1 1 1 2 1 3 1-2 2-5 2-8Z"/></svg>
+        </span>
+        <h3>Gas</h3>
+        <p>Lleva el control de tus cargas, el gasto total y la tendencia del precio por litro.</p>
+        <div class="metrics"><span class="chip">Gasto total</span><span class="chip">Precio promedio</span></div>
+      </article>
+      <article class="card">
+        <span class="badge" style="background:linear-gradient(135deg,var(--c-elec),#512DA8)">
+          <svg class="ic" viewBox="0 0 24 24" fill="#fff"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg>
+        </span>
+        <h3>Electricidad <span class="chip" style="background:color-mix(in srgb,var(--c-elec) 16%,transparent);border-color:transparent;color:var(--c-elec)">Nuevo</span></h3>
+        <p>Del recibo de CFE calcula tu consumo diario y el costo por kWh. Antes no existÃ­a: ahora sÃ­.</p>
+        <div class="metrics"><span class="chip">kWh / dÃ­a</span><span class="chip">Costo / dÃ­a</span><span class="chip">Costo / kWh</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- STEPS -->
+<section class="band band-pad" style="background:var(--surface-2);border-block:1px solid var(--border)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">CÃ³mo funciona</span>
+      <h2>Tres pasos y listo</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <span class="num"></span>
+        <h3>Crea tu cuenta</h3>
+        <p>RegÃ­strate con tu correo. Tus datos se guardan en tu telÃ©fono con contraseÃ±a cifrada.</p>
+      </div>
+      <div class="step">
+        <span class="num"></span>
+        <h3>Captura tus consumos</h3>
+        <p>Agrega tus recibos y cargas de combustible o gas conforme llegan.</p>
+      </div>
+      <div class="step">
+        <span class="num"></span>
+        <h3>Visualiza y ahorra</h3>
+        <p>Mira tus grÃ¡ficas, tu rendimiento y descubre dÃ³nde puedes reducir.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="band band-pad why" id="why">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">VersiÃ³n moderna</span>
+      <h2>Reconstruida con lo mejor de hoy</h2>
+      <p>Misma idea, tecnologÃ­a y seguridad al dÃ­a. Esto es lo que mejorÃ³ frente a la app original.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-item">
+        <span class="tick"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>
+        <div><h3>ContraseÃ±as con cifrado real</h3><p>Hash SHA-256 con salt en lugar del Base64 reversible de la versiÃ³n anterior.</p></div>
+      </div>
+      <div class="why-item">
+        <span class="tick"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>
+        <div><h3>Electricidad, por fin funcional</h3><p>La calculadora de kWh que la original dejÃ³ a medias, aquÃ­ estÃ¡ completa.</p></div>
+      </div>
+      <div class="why-item">
+        <span class="tick"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>
+        <div><h3>Interfaz nueva y vivaz</h3><p>DiseÃ±o Material 3 con colores por categorÃ­a, modo claro y oscuro.</p></div>
+      </div>
+      <div class="why-item">
+        <span class="tick"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>
+        <div><h3>Funciona sin conexiÃ³n</h3><p>Todo se guarda localmente con una base de datos en tu dispositivo.</p></div>
+      </div>
+    </div>
+    <div class="tech">
+      <span>Kotlin</span><span>Jetpack Compose</span><span>Material 3</span><span>Room</span><span>MVVM</span><span>Retrofit</span>
+    </div>
+  </div>
+</section>
+
+<!-- TIPS -->
+<section class="band band-pad" id="tips">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Tips de sustentabilidad</span>
+      <h2>Consejos que sÃ­ mueven la aguja</h2>
+      <p>Cada tip trae el detalle completo: quÃ© hacer, beneficios, un caso de Ã©xito y referencias.</p>
+    </div>
+    <div class="tips">
+      <div class="tip" style="background:linear-gradient(135deg,var(--c-agua),#1565C0)">
+        <h3>Cuida cada gota</h3>
+        <p>Cerrar la llave al lavarte los dientes ahorra hasta 11 L por minuto.</p>
+      </div>
+      <div class="tip" style="background:linear-gradient(135deg,var(--c-elec),#512DA8)">
+        <h3>Ahorra energÃ­a</h3>
+        <p>Cambiar a focos LED reduce hasta 80% el consumo de iluminaciÃ³n.</p>
+      </div>
+      <div class="tip" style="background:linear-gradient(135deg,var(--jade),var(--jade-deep))">
+        <h3>Separa residuos</h3>
+        <p>Reciclar y compostar puede bajar a la mitad la basura de tu hogar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DOWNLOAD -->
+<section class="band band-pad" id="download">
+  <div class="wrap">
+    <div class="cta">
+      <h2>Lleva SustentApp-Moderna en tu bolsillo</h2>
+      <p>InstÃ¡lala en tu telÃ©fono Android y empieza a medir tu consumo hoy mismo. Sin anuncios, sin costo.</p>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+        <span class="store">
+          <svg class="ic" viewBox="0 0 24 24" fill="#9fe7c4"><path d="M3 20.5 12 12 3 3.5v17ZM14 14l2.5 2.5L6 22l8-8Zm0-4L6 2l10.5 5.5L14 10Zm1.3 1.3L18.8 9 21 10.3c1 .6 1 1.8 0 2.4L18.8 15l-3.5-3.7Z"/></svg>
+          <span style="text-align:left"><small>Disponible para</small><b>Android 8.0+</b></span>
+        </span>
+      </div>
+      <p class="note">Esta es una compilaciÃ³n de prueba (APK debug). TambiÃ©n puede distribuirse como APK firmado para producciÃ³n.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="band">
+  <div class="wrap band-pad" style="padding-block:48px">
+    <div class="foot">
+      <div>
+        <div class="brand" style="font-size:1.15rem">
+          <span class="leaf" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3C7 4 5 8 5 12c0 2.2 1.2 3.8 3 4.5C8.5 12 11 9.5 15 8c-3 2-4.5 5-4.5 8.5C14 16.5 17 14 18 9.5 18.5 6 16 3 12 3Z" fill="#fff"/></svg></span>
+          SustentAppÂ·Moderna
+        </div>
+        <p style="color:var(--muted);margin-top:14px;max-width:34ch">Mide y reduce tu huella de consumo de agua, combustible, gas y electricidad.</p>
+        <div class="socials">
+          <a href="https://www.facebook.com/sustentappmx" target="_blank" rel="noopener" aria-label="Facebook"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-2 0-3 1-3 3v2H8v3h3v7h3v-7h3l1-3h-4V9c0-.6.4-1 1-1Z"/></svg></a>
+          <a href="https://www.instagram.com/sustentappmx" target="_blank" rel="noopener" aria-label="Instagram"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="https://x.com/sustentapp_mx" target="_blank" rel="noopener" aria-label="X"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h4l4 5.5L16.5 4H20l-6 7.8L20.5 20h-4l-4.3-5.8L7 20H3.5l6.4-8.2L4 4Z"/></svg></a>
+          <a href="https://www.sustentapp.mx" target="_blank" rel="noopener" aria-label="Sitio web"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4>App</h4>
+        <a href="#features">Calculadoras</a>
+        <a href="#tips">Tips</a>
+        <a href="#why">Por quÃ© moderna</a>
+        <a href="#download">Descargar</a>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <a href="https://www.sustentapp.mx" target="_blank" rel="noopener">Aviso de privacidad</a>
+        <a href="https://www.sustentapp.mx" target="_blank" rel="noopener">TÃ©rminos y condiciones</a>
+        <a href="https://www.sustentapp.mx" target="_blank" rel="noopener">Contacto</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>Â© <span id="yr"></span> SustentApp. Hecho en MÃ©xico.</span>
+      <span>Android Â· Kotlin Â· Jetpack Compose</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Year
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // Theme toggle (per-viewer convenience)
+  (function(){
+    var root = document.documentElement;
+    var btn = document.getElementById('themeBtn');
+    try {
+      var saved = localStorage.getItem('sa-theme');
+      if (saved) root.setAttribute('data-theme', saved);
+    } catch(e){}
+    btn.addEventListener('click', function(){
+      var cur = root.getAttribute('data-theme');
+      var isDark = cur ? cur === 'dark'
+        : window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var next = isDark ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('sa-theme', next); } catch(e){}
+    });
+  })();
+
+  // Smooth anchor scrolling
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      var id = a.getAttribute('href');
+      if (id.length > 1){
+        var el = document.querySelector(id);
+        if (el){ e.preventDefault(); el.scrollIntoView({behavior:'smooth', block:'start'}); }
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
+
